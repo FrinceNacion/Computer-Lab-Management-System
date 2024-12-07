@@ -6,11 +6,10 @@ import java.io.FileWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.stream.JsonWriter;
 
 public class Main {
@@ -18,39 +17,12 @@ public class Main {
     public static File userDbase = new File(
             "C:\\Users\\Frince\\comlabmonitoringsystem\\src\\main\\resources\\userDbase.json");
     public static String userDbasePath = "C:\\Users\\Frince\\comlabmonitoringsystem\\src\\main\\resources\\userDbase.json";
-    public static List<studentData> studentRecord = new LinkedList<studentData>();
 
     public static void printDivider() {
         for (int i = 0; i < 10; i++) {
-            System.out.print("===");
+            System.out.print("====");
         }
         System.out.println("");
-    }
-
-    // method para ma basa ng program yung txt file
-    public static void readRecord(String username, String password) throws FileNotFoundException {
-        Gson gson = new Gson();
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbasePath));
-        studentData studentData = gson.fromJson(bufferedReader, studentData.class);
-        System.out.println(studentData.getUsername());
-    }
-
-    public static void writeRecord(studentData studentData) throws IOException {
-        Gson newStudent = new Gson();
-        if (userDbase.exists()) {
-
-        }
-
-        try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userDbase));) {
-            jsonWriter.beginObject();
-            jsonWriter.name("name").value(studentData.getName());
-            jsonWriter.name("course").value(studentData.getCourse());
-            jsonWriter.name("year").value(studentData.getYear());
-            jsonWriter.name("section").value(studentData.getSection());
-            jsonWriter.name("username").value(studentData.getUsername());
-            jsonWriter.name("password").value(studentData.getPassword());
-            jsonWriter.endObject();
-        }
     }
 
     /**
@@ -63,7 +35,60 @@ public class Main {
      *          not.
      */
     private static boolean validateCredentials(String username, String password) {
-        return false;
+        Gson gson = new Gson();
+        JsonArray jsonArray;
+        boolean isValid = true;
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbasePath))) {
+            jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                studentData studentData = gson.fromJson(jsonArray.get(i), studentData.class);
+                if (studentData.getUsername().equals(username) && !studentData.getPassword().equals(password)) {
+                    System.out.println("Wrong password, please try again.");
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return isValid;
+    }
+
+    // method para ma basa ng program yung txt file
+    public static void readRecord(String username, String password) throws FileNotFoundException {
+        Gson gson = new Gson();
+        JsonArray jsonArray;
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbasePath))) {
+            jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
+            jsonArray.forEach(jsonElement -> {
+                studentData studentData = gson.fromJson(jsonElement, studentData.class);
+                if (studentData.getUsername().equals(username) && studentData.getPassword().equals(password)) {
+                    System.out.println("Welcome " + studentData.getName());
+                }
+            });
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
+    public static void writeRecord(studentData studentData) throws IOException {
+        Gson gson = new Gson();
+        JsonArray jsonArray;
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbase))) {
+            jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
+        } catch (FileNotFoundException e) {
+            jsonArray = new JsonArray();
+        } catch (NullPointerException e) {
+            jsonArray = new JsonArray();
+        }
+
+        jsonArray.add(gson.toJsonTree(studentData));
+
+        try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userDbase))) {
+            gson.toJson(jsonArray, jsonWriter);
+        }
     }
 
     /**
@@ -93,6 +118,12 @@ public class Main {
         } catch (IOException e) {
             System.out.println(e);
         }
+
+        if (registrationStatus) {
+            System.out.println("Registration successful, you can now login.");
+        } else {
+            System.out.println("Registration failed, please try again.");
+        }
         logIn();
     }
 
@@ -117,11 +148,12 @@ public class Main {
                 System.out.print("Enter password: ");
                 password = inp.next();
                 try {
-                    readRecord(username, password);
+                    if (validateCredentials(username, password)) {
+                        readRecord(username, password);
+                    }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                // Validate account
                 break;
             case "2":
                 System.out.print("Enter username: ");
@@ -142,8 +174,14 @@ public class Main {
 
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         if (userDbase.createNewFile()) {
+            try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userDbase))) {
+                jsonWriter.beginArray();
+                jsonWriter.endArray();
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
             System.out.println("record created successfully");
         } else {
             System.out.println("Record already created");
