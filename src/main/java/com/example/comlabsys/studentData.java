@@ -1,4 +1,5 @@
 package com.example.comlabsys;
+
 public class studentData {
     private String name;
     private String course;
@@ -20,23 +21,27 @@ public class studentData {
         return name;
     }
 
-    public String getCourse() {       
+    public String getCourse() {
         return course;
-    }   
+    }
 
-    public String getYear() {       
+    public String getYear() {
         return year;
     }
 
-    public String getSection() {    
+    public String getSection() {
         return section;
     }
 
-    public String getUsername() {   
+    public String getUsername() {
         return username;
     }
 
-    public String getPassword() {   
+    public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

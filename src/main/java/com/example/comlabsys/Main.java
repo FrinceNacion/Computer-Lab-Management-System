@@ -25,15 +25,6 @@ public class Main {
         System.out.println("");
     }
 
-    /**
-     * To validate the credentials given by the user. Will be use in Login and
-     * Register module
-     * 
-     * @param username
-     * @param password
-     * @returns true if the credentials matches the one in the txt file. False if
-     *          not.
-     */
     private static boolean validateCredentials(String username, String password) {
         Gson gson = new Gson();
         JsonArray jsonArray;
@@ -72,6 +63,34 @@ public class Main {
         }
     }
 
+    public static void changePassword(String name, String username, String password) throws FileNotFoundException {
+        Gson gson = new Gson();
+        JsonArray jsonArray;
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbasePath))) {
+            jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                studentData studentData = gson.fromJson(jsonArray.get(i), studentData.class);
+                if (studentData.getUsername().equals(username) && studentData.getName().equals(name)) {
+                    System.out.println("Account found");
+                    studentData.setPassword(password);
+                    jsonArray.set(i, gson.toJsonTree(studentData));
+
+                    try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userDbase))) {
+                        gson.toJson(jsonArray, jsonWriter);
+                        System.out.println("Password changed successfully");
+                    }
+                    break;
+                } else {
+                    System.out.println("Account not found");
+                }
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
     public static void writeRecord(studentData studentData) throws IOException {
         Gson gson = new Gson();
         JsonArray jsonArray;
@@ -91,9 +110,15 @@ public class Main {
         }
     }
 
-    /**
-     * User registration module
-     */
+    private static void registerAdmin() {
+        try {
+            writeRecord(new studentData("ADMIN", "ADMIN", "ADMIN", "ADMIN", "admin", "1234"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     private static void registerUser() {
         boolean registrationStatus = false;
         studentData newUser;
@@ -127,16 +152,30 @@ public class Main {
         logIn();
     }
 
-    /**
-     * Login module
-     */
+    private static void forgotPassword() {
+        String name, username, password;
+        System.out.println("Enter name: ");
+        name = inp.next();
+        System.out.println("Enter username: ");
+        username = inp.next();
+        System.out.println("Enter new password: ");
+        password = inp.next();
+
+        try {
+            changePassword(name, username, password);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void logIn() {
+
         String userOption, username, password;
         printDivider();
         System.out.println("1. Login as Student");
         System.out.println("2. Login as Admin");
         System.out.println("3. Register");
-        System.out.println("2. Forgot Password");
+        System.out.println("4. Forgot Password");
         System.out.print("Go to: ");
         userOption = inp.next();
         printDivider();
@@ -160,13 +199,19 @@ public class Main {
                 username = inp.next();
                 System.out.print("Enter password: ");
                 password = inp.next();
-                // Validate account
+                try {
+                    if (validateCredentials(username, password)) {
+                        readRecord(username, password);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 break;
             case "3":
                 registerUser();
                 break;
             case "4":
-                // To forgot password module
+                forgotPassword();
                 break;
             default:
                 System.out.println("--Invalid Input--");
@@ -179,9 +224,11 @@ public class Main {
             try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userDbase))) {
                 jsonWriter.beginArray();
                 jsonWriter.endArray();
+
             } catch (Exception e) {
                 // TODO: handle exception
             }
+            registerAdmin();
             System.out.println("record created successfully");
         } else {
             System.out.println("Record already created");

@@ -1,1 +1,10 @@
-[{"name":"frince","course":"cs","year":"1","section":"bscs-1a","username":"lacy","password":"123"},{"name":"maynilad","course":"it","year":"1","section":"bsit-1b","username":"may","password":"231"}]
+[
+  {
+    "name": "ADMIN",
+    "course": "ADMIN",
+    "year": "ADMIN",
+    "section": "ADMIN",
+    "username": "admin",
+    "password": "admin1234"
+  }
+]
