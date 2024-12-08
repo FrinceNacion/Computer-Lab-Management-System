@@ -13,18 +13,67 @@ import com.google.gson.JsonArray;
 import com.google.gson.stream.JsonWriter;
 
 public class accountFunctions {
-    public static Scanner inp = new Scanner(System.in);
-    public static File userDbase = new File(
-            "C:\\Users\\Frince\\comlabmonitoringsystem\\src\\main\\resources\\userDbase.json");
-    public static String userDbasePath = "C:\\Users\\Frince\\comlabmonitoringsystem\\src\\main\\resources\\userDbase.json";
+    private static Scanner inp = new Scanner(System.in);
+    private static File userFile = new File(
+            "C:\\Users\\Frince\\comlabmonitoringsystem\\src\\main\\resources\\userStorage.json");
+    public static String userFilePath = "C:\\Users\\Frince\\comlabmonitoringsystem\\src\\main\\resources\\userStorage.json";
+    private static JsonArray jsonArray;
+    private static Gson gson = new Gson();
+    private static String uid = "";
+
+    public static void initialize() throws IOException {
+
+        if (userFile.createNewFile()) {
+            try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userFile))) {
+                jsonWriter.beginArray();
+                jsonWriter.endArray();
+
+            } catch (Exception e) {
+                System.out.println("An error occurred in creating the file.");
+            }
+            registerAdmin();
+            System.out.println("record created successfully");
+        } else {
+            System.out.println("Record already created");
+        }
+    }
+
+    public static userAccount getCurrentUserByCredentials(String username, String password) throws IOException {
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userFilePath))) {
+            jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                userAccount userData = gson.fromJson(jsonArray.get(i), userAccount.class);
+                if (userData.getUsername().equals(username) && userData.getPassword().equals(password)) {
+                    return userData;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static userAccount getCurrentUserByUid(String uid) throws IOException {
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userFilePath))) {
+            jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                userAccount userData = gson.fromJson(jsonArray.get(i), userAccount.class);
+                if (userData.getUid().equals(uid)) {
+                    return userData;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static String getUid() {
+        return uid;
+    }
 
     public static boolean validateCredentials(String username, String password) {
-
-        Gson gson = new Gson();
-        JsonArray jsonArray;
         boolean isValid = true;
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbasePath))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userFilePath))) {
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
             for (int i = 0; i < jsonArray.size(); i++) {
                 userAccount userData = gson.fromJson(jsonArray.get(i), userAccount.class);
@@ -39,57 +88,25 @@ public class accountFunctions {
         return isValid;
     }
 
-    // method para ma basa ng program yung txt file
     public static void readRecord(String username, String password) throws FileNotFoundException {
-        Gson gson = new Gson();
-        JsonArray jsonArray;
-
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbasePath))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userFilePath))) {
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
             jsonArray.forEach(jsonElement -> {
                 userAccount userData = gson.fromJson(jsonElement, userAccount.class);
                 if (userData.getUsername().equals(username) && userData.getPassword().equals(password)) {
                     System.out.println("Welcome " + userData.getName());
+                    uid = userData.getUid();
+                    System.out.println("Your UID is " + getUid());
                 }
             });
         } catch (Exception e) {
-            // TODO: handle exception
-        }
-    }
-
-    public static void changePassword(String name, String username, String password) throws FileNotFoundException {
-        Gson gson = new Gson();
-        JsonArray jsonArray;
-
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbasePath))) {
-            jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
-            for (int i = 0; i < jsonArray.size(); i++) {
-                userAccount userData = gson.fromJson(jsonArray.get(i), userAccount.class);
-                if (userData.getUsername().equals(username) && userData.getName().equals(name)) {
-                    System.out.println("Account found");
-                    userData.setPassword(password);
-                    jsonArray.set(i, gson.toJsonTree(userData));
-
-                    try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userDbase))) {
-                        gson.toJson(jsonArray, jsonWriter);
-                        System.out.println("Password changed successfully");
-                    }
-                    break;
-                } else {
-                    System.out.println("Account not found");
-                }
-            }
-
-        } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println(e.getLocalizedMessage());
         }
     }
 
     public static void writeRecord(userAccount studentData) throws IOException {
-        Gson gson = new Gson();
-        JsonArray jsonArray;
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbase))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userFile))) {
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
         } catch (FileNotFoundException e) {
             jsonArray = new JsonArray();
@@ -99,8 +116,30 @@ public class accountFunctions {
 
         jsonArray.add(gson.toJsonTree(studentData));
 
-        try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userDbase))) {
-            gson.toJson(jsonArray, jsonWriter);
+        utilityClass.putToJson(jsonArray, userFile);
+    }
+
+    public static void changePassword(String name, String username, String password) throws FileNotFoundException {
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userFilePath))) {
+            jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                userAccount userData = gson.fromJson(jsonArray.get(i), userAccount.class);
+                if (userData.getUsername().equals(username) && userData.getName().equals(name)) {
+                    System.out.println("Account found");
+                    userData.setPassword(password);
+                    jsonArray.set(i, gson.toJsonTree(userData));
+
+                    utilityClass.putToJson(jsonArray, userFile);
+                    System.out.println("Password changed successfully");
+                    break;
+                } else {
+                    System.out.println("Account not found");
+                }
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
         }
     }
 
@@ -149,11 +188,11 @@ public class accountFunctions {
 
     public static void forgotPassword() {
         String name, username, password;
-        System.out.println("Enter name: ");
+        System.out.print("Enter name: ");
         name = inp.next();
-        System.out.println("Enter username: ");
+        System.out.print("Enter username: ");
         username = inp.next();
-        System.out.println("Enter new password: ");
+        System.out.print("Enter new password: ");
         password = inp.next();
 
         try {
@@ -163,30 +202,11 @@ public class accountFunctions {
         }
     }
 
-    public static void initialize() throws IOException {
-
-        if (userDbase.createNewFile()) {
-            try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userDbase))) {
-                jsonWriter.beginArray();
-                jsonWriter.endArray();
-
-            } catch (Exception e) {
-                // TODO: handle exception
-            }
-            registerAdmin();
-            System.out.println("record created successfully");
-        } else {
-            System.out.println("Record already created");
-        }
-    }
-
     // functions for admin
     public static userAccount[] getUserList() {
-        Gson gson = new Gson();
-        JsonArray jsonArray;
         userAccount userData[] = {};
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbasePath))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userFilePath))) {
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
             userData = gson.fromJson(jsonArray, userAccount[].class);
         } catch (Exception e) {
@@ -209,7 +229,7 @@ public class accountFunctions {
     }
 
     public static void removeUser() {
-        System.out.println("Enter account No. (refer to the list): ");
+        System.out.print("Enter account No. (refer to the list): ");
         int accountNo = inp.nextInt();
         try {
             removeRecord(accountNo - 1);
@@ -219,24 +239,20 @@ public class accountFunctions {
     }
 
     public static void removeRecord(int index) throws IOException {
-        Gson gson = new Gson();
-        JsonArray jsonArray;
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbasePath))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userFilePath))) {
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
             jsonArray.remove(index);
 
-            try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userDbase))) {
-                gson.toJson(jsonArray, jsonWriter);
-                System.out.println("Account removed successfully");
-            }
+            utilityClass.putToJson(jsonArray, userFile);
+            System.out.println("Account removed successfully");
         } catch (Exception e) {
             System.out.println("An error occurred, please try again.");
         }
     }
 
     public static void modifyAccount() {
-        System.out.println("Enter account No. (refer to the list): ");
+        System.out.print("Enter account No. (refer to the list): ");
         int accountNo = inp.nextInt();
         try {
             modifyRecord(accountNo - 1);
@@ -246,8 +262,6 @@ public class accountFunctions {
     }
 
     public static void modifyRecord(int index) throws IOException {
-        Gson gson = new Gson();
-        JsonArray jsonArray;
         userAccount userData;
 
         System.out.println("Please fill out the following information. Put N/A if not applicable.");
@@ -264,7 +278,7 @@ public class accountFunctions {
         System.out.print("Enter user type: ");
         String userType = inp.next();
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userDbasePath))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userFilePath))) {
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
             userData = gson.fromJson(jsonArray.get(index), userAccount.class);
             userData.setUsername(username);
@@ -275,7 +289,7 @@ public class accountFunctions {
             userData.setAccountType(userType);
             jsonArray.set(index, gson.toJsonTree(userData));
 
-            try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userDbase))) {
+            try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(userFile))) {
                 gson.toJson(jsonArray, jsonWriter);
                 System.out.println("Account modified successfully");
             } catch (Exception e) {

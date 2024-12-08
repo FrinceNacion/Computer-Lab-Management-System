@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Main {
     public static Scanner inp = new Scanner(System.in);
 
-    private static void logIn() {
+    private static void logIn() throws IOException {
         String userOption, username, password;
         boolean onRun = true;
         boolean isLoggedIn = false;
@@ -32,7 +32,8 @@ public class Main {
                         if (accountFunctions.validateCredentials(username, password)) {
                             accountFunctions.readRecord(username, password);
                             isLoggedIn = true;
-                            studentMain();
+                            userPage.userMain(
+                                    accountFunctions.getCurrentUserByCredentials(username, password).getAccountType());
                         } else {
                             System.out.println("No account found, please try again.");
                         }
@@ -72,12 +73,9 @@ public class Main {
         } while (onRun && !isLoggedIn);
     }
 
-    private static void studentMain() {
-
-    }
-
     public static void main(String[] args) throws IOException {
         accountFunctions.initialize();
+        feedbackModule.initializeFeedbackModule();
         logIn();
     }
 }

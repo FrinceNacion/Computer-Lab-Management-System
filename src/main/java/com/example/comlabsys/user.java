@@ -5,12 +5,18 @@ public class user {
     private String username;
     private String password;
     private String accountType;
+    private String uid;
 
     public user(String name, String username, String password, String accountType) {
+        this.uid = (Math.random() * 500) + "";
         this.name = name;
         this.username = username;
         this.password = password;
         this.accountType = accountType;
+    }
+
+    public String getUid() {
+        return uid;
     }
 
     public String getName() {
