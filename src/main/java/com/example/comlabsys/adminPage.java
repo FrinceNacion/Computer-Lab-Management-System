@@ -40,16 +40,70 @@ public class adminPage {
 
     }
 
-    public static void adminMain() throws IOException {
+    public static void manageFeedbacks() throws IOException {
+        utilityClass.printDivider();
+        System.out.println("Feedback management page, what would you like to do?");
+        System.out.println("1. See all feedbacks");
+        System.out.println("2. Remove feedback");
+        System.out.println("3. Back");
+        System.out.println("Go to: ");
+        String feedbackOption = inp.next();
+
+        switch (feedbackOption) {
+            case "1":
+                System.out.println("See all feedbacks");
+                feedbackModule.displayFeedbackList();
+                break;
+            case "2":
+                System.out.println("Remove feedback");
+                feedbackModule.removeFeedback();
+                break;
+            case "3":
+                System.out.println("Back");
+                break;
+            default:
+                System.out.println("Invalid input, please try again.");
+                break;
+        }
+    }
+
+    public static void manageReports() throws IOException {
+        utilityClass.printDivider();
+        System.out.println("Report management page, what would you like to do?");
+        System.out.println("1. See all reports");
+        System.out.println("2. Remove report");
+        System.out.println("3. Back");
+        System.out.println("Go to: ");
+        String reportOption = inp.next();
+
+        switch (reportOption) {
+            case "1":
+                System.out.println("See all reports");
+                reportModule.displayReportList();
+                break;
+            case "2":
+                System.out.println("Remove report");
+                reportModule.removeReport();
+                break;
+            case "3":
+                System.out.println("Back");
+                break;
+            default:
+                System.out.println("Invalid input, please try again.");
+                break;
+        }
+    }
+
+    public static void adminOptionPage() throws IOException {
         boolean onRun = true;
         while (onRun) {
             String adminOption;
             utilityClass.printDivider();
             System.out.println("Welcome to admin's board, what would you like to do?");
             System.out.println("1. Manage users");
-            System.out.println("2. Feedback/s");
-            System.out.println("3. Reports");
-            System.out.println("4. See Lab record");
+            System.out.println("2. Manage Feedbacks");
+            System.out.println("3. Manage Reports");
+            System.out.println("4. Manage Lab record");// <- lagay ko dito 3 modules
             System.out.println("5. See Equipment record");
             System.out.println("6. See Borrow record");
             System.out.println("7. Requested softwares");
@@ -59,16 +113,13 @@ public class adminPage {
 
             switch (adminOption) {
                 case "1":
-                    System.out.println("Manage users");
                     manageUsers();
                     break;
                 case "2":
-                    utilityClass.printDivider();
-                    System.out.println("Feedback/s");
-                    feedbackModule.displayFeedbackList();
+                    manageFeedbacks();
                     break;
                 case "3":
-                    System.out.println("Reports");
+                    manageReports();
                     break;
                 case "4":
                     System.out.println("See Lab record");
@@ -89,7 +140,15 @@ public class adminPage {
                 default:
                     break;
             }
-            utilityClass.printDivider();
         }
+    }
+
+    public static void adminMain(String accountType) throws IOException {
+        if (accountType.equals("Admin")) {
+            adminOptionPage();
+        } else {
+            System.out.println("Invalid account type.");
+        }
+
     }
 }

@@ -12,8 +12,7 @@ public class userPage {
         System.out.println("2. Submit a Lab monitoring form");
         System.out.println("3. Computer Laboratory equipment record");
         System.out.println("4. See borrow record");
-        System.out.println("5. Request for software");
-        System.out.println("6. Exit");
+        System.out.println("5. Exit");
         System.out.print("Go to: ");
         String userOption = inp.next();
 
@@ -28,7 +27,7 @@ public class userPage {
         }
     }
 
-    public static void facultyPage() {
+    public static void facultyPage() throws IOException {
         System.out.println("Welcome to faculty's board, what would you like to do?");
         System.out.println("1. Report a problem");
         System.out.println("2. Monitor Lab and equipment");
@@ -37,6 +36,17 @@ public class userPage {
         System.out.println("5. Request for software");
         System.out.println("6. Exit");
         System.out.print("Go to: ");
+        String userOption = inp.next();
+
+        switch (userOption) {
+            case "1":
+                System.out.println("Report a problem");
+                reportModule.addReport();
+                break;
+
+            default:
+                break;
+        }
     }
 
     public static void userMain(String accountType) throws IOException {
@@ -45,7 +55,9 @@ public class userPage {
             case "student":
                 studentPage();
                 break;
-
+            case "faculty":
+                facultyPage();
+                break;
             default:
                 System.out.println("Invalid account type, please try again.");
                 break;

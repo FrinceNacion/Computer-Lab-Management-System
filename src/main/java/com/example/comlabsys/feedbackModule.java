@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.google.gson.Gson;
@@ -38,6 +39,7 @@ public class feedbackModule {
     public static void addFeedback() throws IOException {
         String submittedBy, dateSubmitted, feedbackHeader, feedbackBody;
         feedbackObject feedback;
+
         submittedBy = accountFunctions.getCurrentUserByUid(accountFunctions.getUid()).getUsername();
         dateSubmitted = utilityClass.getCurrentDate();
 
@@ -45,6 +47,7 @@ public class feedbackModule {
         feedbackHeader = inp.nextLine();
         System.out.print("Write your feedback body: ");
         feedbackBody = inp.nextLine();
+
         feedback = new feedbackObject(submittedBy, dateSubmitted, feedbackHeader, feedbackBody);
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(feedbackFile))) {
@@ -65,6 +68,7 @@ public class feedbackModule {
     public static void displayFeedbackList() throws IOException {
         feedbackObject[] feedbackList = getFeedbackList();
 
+        utilityClass.printDivider();
         if (feedbackList.length != 0) {
             for (int i = 0; i < feedbackList.length; i++) {
                 String feedback = Integer.toString(i + 1) + ". " + feedbackList[i].getFeedbackHeader()
@@ -90,5 +94,28 @@ public class feedbackModule {
         }
 
         return feedbackList;
+    }
+
+    // admin functions
+    public static void removeFeedback() throws IOException {
+        System.out.println("Which feedback would you like to remove?");
+        displayFeedbackList();
+        System.out.print("Enter the feedback No. (refer to the list) which you want to remove: ");
+        int feedbackNo = inp.nextInt();
+        removeFeedbackRecord(feedbackNo - 1);
+    }
+
+    public static void removeFeedbackRecord(int index) throws IOException {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(feedbackFilePath))) {
+            jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
+            jsonArray.remove(index);
+
+            utilityClass.putToJson(jsonArray, feedbackFile);
+            System.out.println("Feedback removed successfully.");
+        } catch (InputMismatchException e) {
+            System.out.println("Please enter a valid input.");
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
     }
 }

@@ -7,6 +7,18 @@ import java.util.Scanner;
 public class Main {
     public static Scanner inp = new Scanner(System.in);
 
+    /**
+     * Prompts user to log in as student or admin, register, forgot password, or
+     * exit.
+     * If user chooses to log in, it will verify the credentials and go to userPage
+     * or adminPage
+     * depending on the account type. If user chooses to register, it will go to
+     * registerUser.
+     * If user chooses forgot password, it will go to forgotPassword.
+     * If user chooses exit, it will terminate the program.
+     *
+     * @throws IOException if there is an error when reading or writing to the file.
+     */
     private static void logIn() throws IOException {
         String userOption, username, password;
         boolean onRun = true;
@@ -29,16 +41,14 @@ public class Main {
                     System.out.print("Enter password: ");
                     password = inp.next();
                     try {
-                        if (accountFunctions.validateCredentials(username, password)) {
-                            accountFunctions.readRecord(username, password);
-                            isLoggedIn = true;
-                            userPage.userMain(
-                                    accountFunctions.getCurrentUserByCredentials(username, password).getAccountType());
-                        } else {
-                            System.out.println("No account found, please try again.");
-                        }
+                        accountFunctions.readRecord(username, password);
+                        isLoggedIn = true;
+                        userPage.userMain(
+                                accountFunctions.getCurrentUserByCredentials(username, password).getAccountType());
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
+                    } catch (NullPointerException e) {
+                        System.out.println("No account found, please try again.");
                     }
                     break;
                 case "2":
@@ -47,13 +57,12 @@ public class Main {
                     System.out.print("Enter password: ");
                     password = inp.next();
                     try {
-                        if (accountFunctions.validateCredentials(username, password)) {
-                            accountFunctions.readRecord(username, password);
-                            isLoggedIn = true;
-                            adminPage.adminMain();
-                        } else {
-                            System.out.println("No account found, please try again.");
-                        }
+                        accountFunctions.readRecord(username, password);
+                        isLoggedIn = true;
+                        adminPage.adminMain(
+                                accountFunctions.getCurrentUserByCredentials(username, password).getAccountType());
+                    } catch (NullPointerException e) {
+                        System.out.println("No account found, please try again.");
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -70,9 +79,11 @@ public class Main {
                 default:
                     System.out.println("--Invalid Input--");
             }
+            System.out.println("");
         } while (onRun && !isLoggedIn);
     }
 
+    // Click nyo yung Run command dito \/
     public static void main(String[] args) throws IOException {
         accountFunctions.initialize();
         feedbackModule.initializeFeedbackModule();
