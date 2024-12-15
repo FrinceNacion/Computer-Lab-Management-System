@@ -25,7 +25,7 @@ public class Main {
         boolean isLoggedIn = false;
         do {
             utilityClass.printDivider();
-            System.out.println("1. Login as Student");
+            System.out.println("1. Login as Student / Faculty");
             System.out.println("2. Login as Admin");
             System.out.println("3. Register");
             System.out.println("4. Forgot Password");
@@ -87,6 +87,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         accountFunctions.initialize();
         feedbackModule.initializeFeedbackModule();
+        reportModule.initializeReportModule();
+        computerLabMonitoringModule.initializeComputerLabMonitoringModule();
         logIn();
     }
 }

@@ -175,7 +175,7 @@ public class accountFunctions {
             }
 
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -190,8 +190,7 @@ public class accountFunctions {
         try {
             writeRecord(new userAccount("N/A", "N/A", "N/A", "N/A", "admin", "1234", "ADMIN"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -302,7 +301,7 @@ public class accountFunctions {
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
             userData = gson.fromJson(jsonArray, userAccount[].class);
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println("Error: " + e.getMessage());
         }
         return userData;
     }
@@ -399,7 +398,7 @@ public class accountFunctions {
         System.out.print("Enter year and section: ");
         String section = inp.next();
         System.out.print("Enter user type: ");
-        String userType = inp.next();
+        String userType = pickAccountType();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(userFilePath))) {
             jsonArray = gson.fromJson(bufferedReader, JsonArray.class);

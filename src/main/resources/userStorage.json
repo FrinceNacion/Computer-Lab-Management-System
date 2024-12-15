@@ -1,1 +1,42 @@
-[{"course":"N/A","Id":"N/A","section":"N/A","name":"N/A","username":"admin","password":"1234","accountType":"ADMIN","uid":"0.6048072677760135"},{"course":"BSCS","Id":"2024-02240","section":"BSCS-1a","name":"Frince","username":"lacy","password":"1234","accountType":"student","uid":"0.5999438082901244"},{"course":"BSCS","Id":"2024-08008","section":"BSCS-1A","name":"Trjistan","username":"Trjistan","password":"Pogiako123","accountType":"faculty","uid":"157.65093185821482"},{"course":"ComputerScience","Id":"2024-00106","section":"BSCS-1A","name":"TPDC","username":"SP","password":"1234","accountType":"student","uid":"245.53053385979223"}]
+[
+  {
+    "course": "N/A",
+    "Id": "N/A",
+    "section": "N/A",
+    "name": "N/A",
+    "username": "admin",
+    "password": "1234",
+    "accountType": "ADMIN",
+    "uid": "0.6048072677760135"
+  },
+  {
+    "course": "BSCS",
+    "Id": "2024-02240",
+    "section": "BSCS-1a",
+    "name": "Frince",
+    "username": "lacy",
+    "password": "1234",
+    "accountType": "student",
+    "uid": "0.5999438082901244"
+  },
+  {
+    "course": "BSCS",
+    "Id": "2024-08008",
+    "section": "BSCS-1A",
+    "name": "Trjistan",
+    "username": "Trjistan",
+    "password": "Pogiako123",
+    "accountType": "faculty",
+    "uid": "157.65093185821482"
+  },
+  {
+    "course": "ComputerScience",
+    "Id": "2024-00106",
+    "section": "BSCS-1A",
+    "name": "TPDC",
+    "username": "SP",
+    "password": "1234",
+    "accountType": "student",
+    "uid": "245.53053385979223"
+  }
+]

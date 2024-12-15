@@ -94,6 +94,32 @@ public class adminPage {
         }
     }
 
+    public static void manageComputerLabMonitoringForms() throws IOException {
+        System.out.println("Computer Lab Monitoring form management page, what would you like to do?");
+        System.out.println("1. See all Computer Lab Monitoring forms");
+        System.out.println("2. Remove Computer Lab Monitoring form");
+        System.out.println("3. Back");
+        System.out.println("Go to: ");
+        String userOption = inp.next();
+
+        switch (userOption) {
+            case "1":
+                System.out.println("See all Computer Lab Monitoring forms");
+                computerLabMonitoringModule.displayComputerLabMonitoringFormList();
+                break;
+            case "2":
+                System.out.println("Remove Computer Lab Monitoring form");
+                computerLabMonitoringModule.removeForm();
+                break;
+            case "3":
+                System.out.println("Back");
+                break;
+            default:
+                System.out.println("Invalid input, please try again.");
+                break;
+        }
+    }
+
     public static void adminOptionPage() throws IOException {
         boolean onRun = true;
         while (onRun) {
@@ -103,7 +129,7 @@ public class adminPage {
             System.out.println("1. Manage users");
             System.out.println("2. Manage Feedbacks");
             System.out.println("3. Manage Reports");
-            System.out.println("4. Manage Lab record");// <- lagay ko dito 3 modules
+            System.out.println("4. Manage Computer Lab Monitoring forms");// <- lagay ko dito 3 modules
             System.out.println("5. See Equipment record");
             System.out.println("6. See Borrow record");
             System.out.println("7. Requested softwares");
@@ -122,7 +148,7 @@ public class adminPage {
                     manageReports();
                     break;
                 case "4":
-                    System.out.println("See Lab record");
+                    manageComputerLabMonitoringForms();
                     break;
                 case "5":
                     System.out.println("See Equipment record");
@@ -144,7 +170,7 @@ public class adminPage {
     }
 
     public static void adminMain(String accountType) throws IOException {
-        if (accountType.equals("Admin")) {
+        if (accountType.equals("ADMIN")) {
             adminOptionPage();
         } else {
             System.out.println("Invalid account type.");

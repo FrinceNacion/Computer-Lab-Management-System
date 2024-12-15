@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -33,5 +34,10 @@ public class utilityClass {
     public static String getCurrentDate() {
         LocalDate date = LocalDate.now();
         return date.toString();
+    }
+
+    public static String getCurrentTime() {
+        LocalTime time = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute());
+        return time.toString();
     }
 }
