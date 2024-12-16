@@ -188,7 +188,7 @@ public class equipmentModule {
 
     public static String pickBorrowedStatus() {
         String borrowedStatus = null;
-        System.out.println("\nPlease select the borrowed status of the equipment:");
+        System.out.println("\nPlease select the status of the equipment:");
         System.out.println("1. Borrowed");
         System.out.println("2. Available for borrow");
         System.out.println("3. Returned");

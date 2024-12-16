@@ -204,7 +204,7 @@ public class accountFunctions {
     public static void registerUser() {
         boolean registrationStatus = false;
         userAccount newUser;
-        System.out.println("Please fill out the following information. Put N/A if not applicable.");
+        System.out.println("\nPlease fill out the following information. Put N/A if not applicable.");
         System.out.print("Enter username: ");
         String username = inp.nextLine();
         System.out.print("Enter password: ");
@@ -244,7 +244,7 @@ public class accountFunctions {
      */
     public static String pickAccountType() {
         String accountType;
-        System.out.println("Please choose your account type.");
+        System.out.println("\nPlease choose your account type.");
         System.out.println("1. Student");
         System.out.println("2. Faculty");
         System.out.print("Enter account type (1 or 2): ");
@@ -334,7 +334,7 @@ public class accountFunctions {
      * @throws IOException if an error occurs while writing to the file
      */
     public static void removeUser() {
-        System.out.println("Which account would you like to remove?");
+        System.out.println("\nWhich account would you like to remove?");
         printUserList();
         System.out.print("Enter the account No. (refer to the list) which you want to remove: ");
         int accountNo = inp.nextInt();
@@ -374,7 +374,7 @@ public class accountFunctions {
      * @throws IOException if an error occurs while writing to the file
      */
     public static void modifyAccount() {
-        System.out.print("Enter account No. (refer to the list): ");
+        System.out.print("\nEnter account No. (refer to the list): ");
         int accountNo = inp.nextInt();
         try {
             modifyRecord(accountNo - 1);
@@ -386,7 +386,7 @@ public class accountFunctions {
     public static void modifyRecord(int index) throws IOException {
         userAccount userData;
 
-        System.out.println("Please fill out the following information. Put N/A if not applicable.");
+        System.out.println("\nPlease fill out the following information. Put N/A if not applicable.");
         System.out.print("Enter username: ");
         String username = inp.next();
         System.out.print("Enter name: ");

@@ -2,16 +2,16 @@ package com.example.comlabsys;
 
 public class softwareObject {
     private String softwareName, softwareVersion, requestStatus, submittedBy;
-    private boolean isFreeware, isLicensed;
+    private String isFreeware, isLicensed;
 
-    public softwareObject(String softwareName, String softwareVersion, boolean isFreeware, boolean isLicensed,
-            String requestStatus, String submittedBy) {
+    public softwareObject(String softwareName, String softwareVersion, String submittedBy, String isFreeware,
+            String isLicensed) {
         this.softwareName = softwareName;
         this.softwareVersion = softwareVersion;
         this.isFreeware = isFreeware;
         this.isLicensed = isLicensed;
-        this.requestStatus = requestStatus;
         this.submittedBy = submittedBy;
+        this.requestStatus = "N/A";
     }
 
     public String getSoftwareName() {
@@ -22,11 +22,11 @@ public class softwareObject {
         return softwareVersion;
     }
 
-    public boolean getIsFreeware() {
+    public String getIsFreeware() {
         return isFreeware;
     }
 
-    public boolean getIsLicensed() {
+    public String getIsLicensed() {
         return isLicensed;
     }
 
@@ -34,12 +34,12 @@ public class softwareObject {
         return requestStatus;
     }
 
-    public String getSubmittedBy() {
-        return submittedBy;
-    }
-
     public void setRequestStatus(String status) {
         this.requestStatus = status;
+    }
+
+    public String getSubmittedBy() {
+        return submittedBy;
     }
 
 }

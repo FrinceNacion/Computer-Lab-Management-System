@@ -85,6 +85,7 @@ public class Main {
 
     // Click nyo yung Run command dito \/
     public static void main(String[] args) throws IOException {
+        softwareRequestModule.initialize();
         equipmentModule.initialize();
         accountFunctions.initialize();
         feedbackModule.initializeFeedbackModule();

@@ -89,7 +89,7 @@ public class userPage {
                     break;
 
                 case "5":
-                    System.out.println("Request for software");
+                    softwareRequestModule.addSoftwareRequest();
                     break;
 
                 case "6":

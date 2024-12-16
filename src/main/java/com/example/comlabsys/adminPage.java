@@ -155,6 +155,30 @@ public class adminPage {
         }
     }
 
+    public static void manageSoftwareRequest() throws IOException {
+        System.out.println("\nSoftware Requests management page, what would you like to do?");
+        System.out.println("1. See request/s");
+        System.out.println("2. Update request status");
+        System.out.println("3. Back");
+        System.out.print("Go to: ");
+        String userOption = inp.next();
+
+        switch (userOption) {
+            case "1":
+                softwareRequestModule.displaySoftwareObjectList();
+                break;
+            case "2":
+                softwareRequestModule.updateSoftwareRequest();
+                break;
+            case "3":
+                break;
+            default:
+                System.out.println("Invalid input, please try again");
+                break;
+        }
+
+    }
+
     public static void adminOptionPage() throws IOException {
         boolean onRun = true;
         while (onRun) {
@@ -166,7 +190,7 @@ public class adminPage {
             System.out.println("3. Manage Reports");
             System.out.println("4. Manage Computer Lab Monitoring forms");
             System.out.println("5. Manage Equipments");
-            System.out.println("6. Requested softwares");
+            System.out.println("6. Manage Software Requests");
             System.out.println("7. Exit");
             System.out.print("Go to: ");
             adminOption = inp.next();
@@ -188,7 +212,7 @@ public class adminPage {
                     manageEquipment();
                     break;
                 case "6":
-                    System.out.println("Requested softwares");
+                    manageSoftwareRequest();
                     break;
                 case "7":
                     System.out.println("Exit");
