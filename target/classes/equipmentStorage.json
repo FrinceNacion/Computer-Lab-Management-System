@@ -1,0 +1,26 @@
+[
+  {
+    "equipmentID": "123654",
+    "equipmentName": "Printer",
+    "borrowedStatus": "N/A",
+    "equipmentDescription": "N/A",
+    "equipmentStatus": "Available"
+  },
+  {
+    "equipmentID": "1234124",
+    "equipmentName": "Dell TV",
+    "borrowedStatus": "N/A",
+    "equipmentDescription": "Model.1252",
+    "equipmentStatus": "Available"
+  },
+  {
+    "borrowerName": "Frince nacion",
+    "dateBorrowed": "12/12/24",
+    "dateReturn": "18/12/24",
+    "borrowedStatus": "Borrowed",
+    "equipmentID": "435621",
+    "equipmentName": "Laptop 1",
+    "equipmentDescription": "Model.123",
+    "equipmentStatus": "Available"
+  }
+]

@@ -63,8 +63,31 @@ public class computerLabMonitoringModule {
 
     }
 
-    public static void submitComputerLabMonitoringForm() {
-        System.out.println("Computer Lab Monitoring form submitted successfully.");
+    public static void submitComputerLabMonitoringForm() throws IOException {
+        computerLabMonitoringFormObject computerLabMonitoringFormObject;
+        try {
+            System.out.println("Which form would you like to make a submission?");
+            displayOnlineComputerLabMonitoringFormList();
+            System.out.print("Please enter the index of the form you want to submit (Refer to the list): ");
+            int index = inp.nextInt() - 1;
+            computerLabMonitoringFormObject = getComputerLabMonitoringFormRecord(index);
+            computerLabUser[] users = computerLabMonitoringFormObject.getUserList();
+
+            System.out.println("Please fill out the following information.");
+            System.out.print("Computer ID: ");
+            String computerID = inp.next();
+
+            System.out.println("No computer ID provided, submission not added to form.");
+            computerLabMonitoringFormObject.addToUserList(users, new computerLabUser(computerID));
+
+            jsonArray.set(index, gson.toJsonTree(computerLabMonitoringFormObject));
+            utilityClass.putToJson(jsonArray, computerLabMonitoringFile);
+        } catch (InputMismatchException e) {
+            System.out.println("Please enter a valid input.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getLocalizedMessage());
+        }
+
     }
 
     public static String getNumOfOnlineForms() throws IOException {
@@ -112,7 +135,8 @@ public class computerLabMonitoringModule {
                         + computerLabMonitoringFormList[i].getTime() + ", Date: "
                         + computerLabMonitoringFormList[i].getDate() + ", Description: "
                         + computerLabMonitoringFormList[i].getDescription() + ", Status: "
-                        + computerLabMonitoringFormList[i].getStatus();
+                        + computerLabMonitoringFormList[i].getStatus() + ", Number of Submissions: "
+                        + getComputerLabMonitoringFormRecord(i).getUserList().length;
                 System.out.println(computerLabMonitoringForm);
             }
         } else {
@@ -153,7 +177,7 @@ public class computerLabMonitoringModule {
 
         System.out.println("Please fill out the following information, put N/A if not applicable.");
         System.out.print("Enter description: ");
-        String description = inp.nextLine().length() != 0 ? inp.nextLine() : "N/A";
+        String description = inp.nextLine();
         String status = pickStatus();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(computerLabMonitoringFilePath))) {
@@ -172,6 +196,19 @@ public class computerLabMonitoringModule {
             System.out.println("An error occurred, please try again.");
         }
 
+    }
+
+    public static computerLabMonitoringFormObject getComputerLabMonitoringFormRecord(int index) throws IOException {
+        computerLabMonitoringFormObject computerLabMonitoringFormObject = null;
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(computerLabMonitoringFilePath))) {
+            jsonArray = gson.fromJson(bufferedReader, JsonArray.class);
+            computerLabMonitoringFormObject = gson.fromJson(jsonArray.get(index),
+                    computerLabMonitoringFormObject.class);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Please enter a valid input.");
+        }
+        return computerLabMonitoringFormObject;
     }
 
     public static String pickStatus() {
@@ -199,7 +236,7 @@ public class computerLabMonitoringModule {
     public static void removeForm() throws IOException {
         System.out.println("Which form would you like to remove?");
         displayComputerLabMonitoringFormList();
-        System.out.println("Please enter the index of the form you want to remove (Refer to the list): ");
+        System.out.println("Please enter the index of the form you want to remove (Refer to the list):");
         try {
             removeComputerLabMonitoringFormRecord(inp.nextInt() - 1);
         } catch (IndexOutOfBoundsException e) {

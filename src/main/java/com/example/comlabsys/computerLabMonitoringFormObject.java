@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class computerLabMonitoringFormObject {
     private String roomName, postedBy, date, time, description, status;
-    private computerLabUser[] computerLabUserList = {};
+    private computerLabUser[] computerLabUserList;
 
     public computerLabMonitoringFormObject(String roomName, String description, String status) throws IOException {
         userAccount currentUser = accountFunctions.getCurrentUserByUid(accountFunctions.getUid());
@@ -50,8 +50,19 @@ public class computerLabMonitoringFormObject {
         this.status = status;
     }
 
-    public void addToUserList(computerLabUser[] computerLabUser) {
-        this.computerLabUserList = computerLabUser;
+    public void addToUserList(computerLabUser[] computerLabUser, computerLabUser newLabUser) {
+        computerLabUser[] newArray = new computerLabUser[getUserList().length + 1];
+
+        if (getUserList().length == 0) {
+            newArray[0] = newLabUser;
+        } else {
+            for (int i = 0; i < computerLabUser.length; i++) {
+                newArray[i] = computerLabUser[i];
+            }
+            newArray[getUserList().length + 1] = newLabUser;
+        }
+        System.out.println("Your submission has been added to the form");
+        this.computerLabUserList = newArray;
     }
 
     public computerLabUser[] getUserList() {

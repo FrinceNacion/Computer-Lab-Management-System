@@ -9,12 +9,12 @@ public class adminPage {
     // User management module
     public static void manageUsers() {
         utilityClass.printDivider();
-        System.out.println("User management page, what would you like to do?");
+        System.out.println("\nUser management page, what would you like to do?");
         System.out.println("1. See all accounts");
         System.out.println("2. Remove user account");
         System.out.println("3. Modify user account");
         System.out.println("4. Back");
-        System.out.println("Go to: ");
+        System.out.print("Go to: ");
         String userOption = inp.next();
 
         switch (userOption) {
@@ -42,11 +42,11 @@ public class adminPage {
 
     public static void manageFeedbacks() throws IOException {
         utilityClass.printDivider();
-        System.out.println("Feedback management page, what would you like to do?");
+        System.out.println("\nFeedback management page, what would you like to do?");
         System.out.println("1. See all feedbacks");
         System.out.println("2. Remove feedback");
         System.out.println("3. Back");
-        System.out.println("Go to: ");
+        System.out.print("Go to: ");
         String feedbackOption = inp.next();
 
         switch (feedbackOption) {
@@ -69,11 +69,11 @@ public class adminPage {
 
     public static void manageReports() throws IOException {
         utilityClass.printDivider();
-        System.out.println("Report management page, what would you like to do?");
+        System.out.println("\nReport management page, what would you like to do?");
         System.out.println("1. See all reports");
         System.out.println("2. Remove report");
         System.out.println("3. Back");
-        System.out.println("Go to: ");
+        System.out.print("Go to: ");
         String reportOption = inp.next();
 
         switch (reportOption) {
@@ -95,11 +95,11 @@ public class adminPage {
     }
 
     public static void manageComputerLabMonitoringForms() throws IOException {
-        System.out.println("Computer Lab Monitoring form management page, what would you like to do?");
+        System.out.println("\nComputer Lab Monitoring form management page, what would you like to do?");
         System.out.println("1. See all Computer Lab Monitoring forms");
         System.out.println("2. Remove Computer Lab Monitoring form");
         System.out.println("3. Back");
-        System.out.println("Go to: ");
+        System.out.print("Go to: ");
         String userOption = inp.next();
 
         switch (userOption) {
@@ -120,21 +120,55 @@ public class adminPage {
         }
     }
 
+    public static void manageEquipment() throws IOException {
+        System.out.println("\nEquipment management page, what would you like to do?");
+        System.out.println("1. See all equipments");
+        System.out.println("2. See borrowed equipments");
+        System.out.println("3. Add new equipment");
+        System.out.println("4. Update equipment");
+        System.out.println("5. Remove equipment");
+        System.out.println("6. Back");
+        System.out.print("Go to: ");
+        String userOption = inp.next();
+
+        switch (userOption) {
+            case "1":
+                equipmentModule.displayEquipmentList();
+                break;
+            case "2":
+                equipmentModule.displayBorrowedEquipmentList();
+                break;
+            case "3":
+                equipmentModule.addEquipment();
+                break;
+            case "4":
+                equipmentModule.updateEquipment();
+                break;
+            case "5":
+                equipmentModule.removeEquipment();
+                break;
+            case "6":
+                break;
+            default:
+                System.out.println("Invalid input, please try again.");
+                break;
+        }
+    }
+
     public static void adminOptionPage() throws IOException {
         boolean onRun = true;
         while (onRun) {
             String adminOption;
             utilityClass.printDivider();
-            System.out.println("Welcome to admin's board, what would you like to do?");
+            System.out.println("\nWelcome to admin's board, what would you like to do?");
             System.out.println("1. Manage users");
             System.out.println("2. Manage Feedbacks");
             System.out.println("3. Manage Reports");
-            System.out.println("4. Manage Computer Lab Monitoring forms");// <- lagay ko dito 3 modules
-            System.out.println("5. See Equipment record");
-            System.out.println("6. See Borrow record");
-            System.out.println("7. Requested softwares");
-            System.out.println("8. Exit");
-            System.out.println("Go to: ");
+            System.out.println("4. Manage Computer Lab Monitoring forms");
+            System.out.println("5. Manage Equipments");
+            System.out.println("6. Requested softwares");
+            System.out.println("7. Exit");
+            System.out.print("Go to: ");
             adminOption = inp.next();
 
             switch (adminOption) {
@@ -151,19 +185,17 @@ public class adminPage {
                     manageComputerLabMonitoringForms();
                     break;
                 case "5":
-                    System.out.println("See Equipment record");
+                    manageEquipment();
                     break;
                 case "6":
-                    System.out.println("See Borrow record");
-                    break;
-                case "7":
                     System.out.println("Requested softwares");
                     break;
-                case "8":
+                case "7":
                     System.out.println("Exit");
                     onRun = false;
                     break;
                 default:
+                    System.out.println("Invalid input, please try again.");
                     break;
             }
         }

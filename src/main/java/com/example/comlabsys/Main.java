@@ -36,7 +36,7 @@ public class Main {
 
             switch (userOption) {
                 case "1":
-                    System.out.print("Enter username: ");
+                    System.out.print("\nEnter username: ");
                     username = inp.next();
                     System.out.print("Enter password: ");
                     password = inp.next();
@@ -52,7 +52,7 @@ public class Main {
                     }
                     break;
                 case "2":
-                    System.out.print("Enter username: ");
+                    System.out.print("\nEnter username: ");
                     username = inp.next();
                     System.out.print("Enter password: ");
                     password = inp.next();
@@ -85,6 +85,7 @@ public class Main {
 
     // Click nyo yung Run command dito \/
     public static void main(String[] args) throws IOException {
+        equipmentModule.initialize();
         accountFunctions.initialize();
         feedbackModule.initializeFeedbackModule();
         reportModule.initializeReportModule();
